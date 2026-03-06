@@ -21,7 +21,7 @@ def start(message):
     btn1 = types.KeyboardButton("🐶 Купить щенка")
     btn2 = types.KeyboardButton("👀 Посмотреть щенков")
     btn3 = types.KeyboardButton("📸 Фотосессия")
-    btn4 = types.KeyboardButton("❓ Помощь")
+    btn4 = types.KeyboardButton("❓ Контакты")  # Изменил с "Помощь" на "Контакты"
     markup.add(btn1, btn2, btn3, btn4)
     
     bot.send_message(
@@ -58,15 +58,16 @@ def handle_message(message):
         )
     
     elif text == "👀 Посмотреть щенков":
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("📷 Открыть VK", url="https://vk.com/izmaksimkovo"))
+        
         bot.send_message(
             chat_id,
             "📸 *Фото наших щенков:*\n\n"
             "Смотрите в нашем сообществе VK 👇",
-            parse_mode='Markdown'
+            parse_mode='Markdown',
+            reply_markup=markup  # ← Отправляем сразу с кнопкой
         )
-        markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton("📷 Открыть VK", url="https://vk.com/izmaksimkovo"))
-
     
     elif text == "📸 Фотосессия":
         markup = types.InlineKeyboardMarkup()
@@ -96,10 +97,11 @@ def handle_message(message):
             parse_mode='Markdown',
             reply_markup=markup
         )
+    
     else:
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         markup.add(types.KeyboardButton("🐶 Купить щенка"), types.KeyboardButton("📸 Фотосессия"))
-        markup.add(types.KeyboardButton("❓ Помощь"))
+        markup.add(types.KeyboardButton("❓ Контакты"))  # Изменил с "Помощь" на "Контакты"
         
         bot.send_message(
             chat_id,
@@ -144,8 +146,8 @@ def handle_callback(call):
         markup = types.InlineKeyboardMarkup()
         markup.add(types.InlineKeyboardButton("📸 Портфолио", url="https://corgimax.ru/photoshoot#portfolio"))
         bot.send_message(chat_id, "Нажмите на кнопку:", reply_markup=markup)
-
-         elif call.data == "consult":
+    
+    elif call.data == "consult":
         admin_msg = f"📝 *Заявка на консультацию!*\n\n"
         admin_msg += f"👤 Пользователь: @{call.from_user.username or 'нет username'}\n"
         admin_msg += f"🆔 ID: {call.from_user.id}\n"
